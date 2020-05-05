@@ -1,20 +1,10 @@
-import * as express from 'express'
-import * as util from 'util'
-import * as console from 'console'
-import * as process from 'process'
-import { positiveInteger } from './env'
+import { createServer, proxy } from 'aws-serverless-express'
+import { Context } from 'aws-lambda'
+import app from './app'
 
-const app = express()
+const server = createServer(app)
 
-const listen = util.promisify(app.listen).bind(app)
-
-const start = async () => {
-  const port = positiveInteger('PORT', 3000)
-  await listen(port)
-  console.log()
+// noinspection JSUnusedGlobalSymbols
+export const handler = (event: any, context: Context) => {
+  proxy(server, event, context)
 }
-
-start().catch(error => {
-  console.error(error.message)
-  process.exit(1)
-})

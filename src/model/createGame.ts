@@ -24,18 +24,23 @@ const maybeAddBidding = (game: Game, options: GameOptions):Game => {
 }
 
 export type GameOptions = Readonly<{
+  names?: ReadonlyArray<string>
   firstHand?: Hand
   bids?: number[]
 }>
 
 export default (options: GameOptions = {}): Game => {
-  const players = defaultPlayerNames.map((name, i) => ({
+  const names = options.names || defaultPlayerNames
+  if (names.length !== defaultPlayerNames.length) {
+    throw new Error('bad player names')
+  }
+  const players = names.map((name, i) => ({
     id: createId(),
     number: i,
     name,
     points: 0
   }))
-  const hand = options.firstHand || createHand({ playerCount: defaultPlayerNames.length })
+  const hand = options.firstHand || createHand({ playerCount: names.length })
   const game = {
     id: createId(),
     winningScore: 500,

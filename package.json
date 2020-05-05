@@ -4,6 +4,7 @@
   "description": "3 player spades server and web app",
   "main": "index.js",
   "scripts": {
+    "dev": "node dev",
     "lint": "standardx --fix src/**/*.ts",
     "test": "jest",
     "test:dev": "jest --watch"
@@ -24,6 +25,9 @@
   },
   "homepage": "https://github.com/johnomalley/3-way-spades-server#readme",
   "devDependencies": {
+    "@types/aws-lambda": "~8.10.51",
+    "@types/aws-serverless-express": "~3.3.3",
+    "@types/body-parser": "~1.19.0",
     "@types/express": "~4.17.6",
     "@types/jest": "~25.2.1",
     "@types/lodash": "~4.14.150",
@@ -35,6 +39,7 @@
     "jest": "~25.5.4",
     "standardx": "~5.0.0",
     "ts-jest": "~25.4.0",
+    "ts-node": "~8.10.1",
     "typescript": "~3.8.3"
   },
   "eslintConfig": {
@@ -66,6 +71,8 @@
   },
   "dependencies": {
     "aws-sdk": "~2.668.0",
+    "aws-serverless-express": "~3.3.8",
+    "body-parser": "~1.19.0",
     "lodash": "~4.17.15",
     "npm": "~6.14.5",
     "randomstring": "~1.1.5"
