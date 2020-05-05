@@ -15,11 +15,11 @@ const parseBody = (body: any): { status?: number, message?: string, card?: Card 
   }
   return {
     status: 400,
-    message: `Malformed body - needs rank and suit: ${JSON.stringify(body)}`,
+    message: `Malformed body - needs rank and suit: ${JSON.stringify(body)}`
   }
 }
 
-export default async ({  body, game, playerId }: GameRequest, res: Response) => {
+export default async ({ body, game, playerId }: GameRequest, res: Response) => {
   const { status, message, card } = parseBody(body)
   if (status) {
     res.status(status).json({ message })

@@ -15,7 +15,7 @@ const parseBody = ({ value }: any): { status?: number, message?: string, value?:
   }
 }
 
-export default async ({  body, game, playerId }: GameRequest, res: Response) => {
+export default async ({ body, game, playerId }: GameRequest, res: Response) => {
   const { status, message, value } = parseBody(body)
   if (status) {
     res.status(status).json({ message })

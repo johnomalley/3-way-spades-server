@@ -1,9 +1,9 @@
-import last = require('lodash/last')
-import moment = require('moment')
 import { Game, Hand } from './types'
 import createId from './createId'
 import createHand from './createHand'
 import bid from './bid'
+import last = require('lodash/last')
+import moment = require('moment')
 
 export const defaultPlayerNames = [
   'Larry',

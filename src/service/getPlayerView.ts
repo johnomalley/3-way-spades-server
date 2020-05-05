@@ -1,5 +1,5 @@
-import last = require('lodash/last')
 import { Card, Game, Trick } from '../model/types'
+import last = require('lodash/last')
 
 export type PlayerView = Readonly<{
   startTime: string
@@ -21,9 +21,9 @@ export type PlayerView = Readonly<{
 
 export default (game: Game, playerId: string): PlayerView => {
   const player = game.players.find(_ => _.id === playerId)!
-  const {  currentPlayerNumber, playerHands, tricks } = last(game.hands)!
+  const { currentPlayerNumber, playerHands, tricks } = last(game.hands)!
   const { cardsInHand, cardsPlayed } = playerHands[player.number]
-  const [ currentTrick, lastTrick ] = tricks.slice(Math.max(0, tricks.length - 2)).reverse()
+  const [currentTrick, lastTrick] = tricks.slice(Math.max(0, tricks.length - 2)).reverse()
   return {
     startTime: game.startTime,
     endTime: game.endTime,

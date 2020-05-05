@@ -1,6 +1,6 @@
-import isString = require('lodash/isString');
 import { Request, Response } from 'express'
 import newGame from './newGame'
+import isString = require('lodash/isString');
 
 const parseBody = (req: Request): { status?: number, message?: string, names?: ReadonlyArray<string> } => {
   const raw = req.body.names

@@ -29,12 +29,12 @@ type EndpointSpec = Readonly<{
 
 const endpointSpecs: ReadonlyArray<EndpointSpec> = [
   {
-    path: '/',
+    path: '/new',
     method: 'post',
     endpoint: newGameEndpoint
   },
   {
-    path: `/poll/:gameId/:playerId/:timestamp`,
+    path: '/poll/:gameId/:playerId/:timestamp',
     method: 'get',
     endpoint: pollForChangesEndpoint
   },
