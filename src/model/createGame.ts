@@ -1,8 +1,9 @@
+import last = require('lodash/last')
+import moment = require('moment')
 import { Game, Hand } from './types'
 import createId from './createId'
 import createHand from './createHand'
 import bid from './bid'
-import last = require('lodash/last')
 
 export const defaultPlayerNames = [
   'Larry',
@@ -41,8 +42,11 @@ export default (options: GameOptions = {}): Game => {
     points: 0
   }))
   const hand = options.firstHand || createHand({ playerCount: names.length })
+  const now = moment()
   const game = {
     id: createId(),
+    startTime: now.toISOString(),
+    timestamp: now.valueOf(),
     winningScore: 500,
     players,
     hands: [hand]

@@ -4,7 +4,7 @@
   "description": "3 player spades server and web app",
   "main": "index.js",
   "scripts": {
-    "dev": "node dev",
+    "dev": "nodemon --watch src -e ts dev.js",
     "lint": "standardx --fix src/**/*.ts",
     "test": "jest",
     "test:dev": "jest --watch"
@@ -37,6 +37,7 @@
     "@typescript-eslint/parser": "~2.30.0",
     "express": "~4.17.1",
     "jest": "~25.5.4",
+    "nodemon": "~2.0.3",
     "standardx": "~5.0.0",
     "ts-jest": "~25.4.0",
     "ts-node": "~8.10.1",
@@ -74,6 +75,7 @@
     "aws-serverless-express": "~3.3.8",
     "body-parser": "~1.19.0",
     "lodash": "~4.17.15",
+    "moment": "~2.25.3",
     "npm": "~6.14.5",
     "randomstring": "~1.1.5"
   }

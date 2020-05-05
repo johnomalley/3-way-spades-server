@@ -11,6 +11,7 @@ import createHand from './createHand'
 import getHandScore from './getHandScore'
 import last = require('lodash/last')
 import initial = require('lodash/initial')
+import moment = require('moment')
 
 const validateCard = (hand: Hand, player: Player, card: Card) => {
   const cardInHand = hand.playerHands[player.number]!.cardsInHand.find(_ =>
@@ -88,14 +89,17 @@ const scoreHand = (game: Game, hand: Hand): Game => ({
 
 const isGameComplete = (game: Game) => game.players.some(_ => _.points >= game.winningScore)
 
-const addNewHandIfNeeded = (game: Game) => isGameComplete(game) ? game : {
-  ...game,
-  hands: [
-    ...game.hands,
-    createHand({ firstToBid: nextPlayerNumber(game, last(game.hands)!.firstToBid) })
-  ]
-}
-
+const addNewHandOrEndGame = (game: Game) =>
+  isGameComplete(game) ? {
+    ...game,
+    endTime: moment().toISOString()
+  } : {
+    ...game,
+    hands: [
+      ...game.hands,
+      createHand({ firstToBid: nextPlayerNumber(game, last(game.hands)!.firstToBid) })
+    ]
+  }
 
 // first play from first player
 export default (game: Game, playerId: string, card: Card): Game => {
@@ -106,15 +110,18 @@ export default (game: Game, playerId: string, card: Card): Game => {
   }
   validateCard(hand, player, card)
   const lastTrick = last(hand.tricks)
+  let result
   if (!lastTrick || (hand.tricks.length === 1 && lastTrick.winner === undefined)) {
-    return playFirstTrick(game, player, card)
+    result = playFirstTrick(game, player, card)
   } else {
-    let result = playSubsequentTrick(game, player, card)
+    result = playSubsequentTrick(game, player, card)
     const updatedHand = last(result.hands)!
     if (isHandComplete(updatedHand)) {
-      return addNewHandIfNeeded(scoreHand(result, updatedHand))
-    } else {
-      return result
+      result = addNewHandOrEndGame(scoreHand(result, updatedHand))
     }
+  }
+  return {
+    ...result,
+    timestamp: Date.now()
   }
 }

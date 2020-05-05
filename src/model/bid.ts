@@ -25,6 +25,7 @@ export default (game: Game, playerId: string, bid: number): Game => {
     const currentPlayerNumber = (hand.currentPlayerNumber + 1) % game.players.length
     return {
       ...game,
+      timestamp: Date.now(),
       hands: updateCurrentHand(game.hands, { playerHands, phase, currentPlayerNumber })
     }
   }

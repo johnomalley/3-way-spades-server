@@ -1,9 +1,9 @@
 import { Response } from 'express'
 import { GameRequest } from './gameMiddleware'
-import db from './db'
 import { Card, Suit } from '../model/types'
 import play from '../model/play'
 import getPlayerView from './getPlayerView'
+import { putGame } from './gameBucket'
 
 const parseBody = (body: any): { status?: number, message?: string, card?: Card } => {
   const { rank, suit } = body
@@ -25,7 +25,7 @@ export default async ({  body, game, playerId }: GameRequest, res: Response) => 
     res.status(status).json({ message })
   } else {
     const newGame = play(game, playerId, card!)
-    await db.put(newGame)
+    await putGame(newGame)
     res.json(getPlayerView(newGame, playerId))
   }
 }

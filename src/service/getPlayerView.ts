@@ -2,7 +2,10 @@ import last = require('lodash/last')
 import { Card, Game, Trick } from '../model/types'
 
 export type PlayerView = Readonly<{
-  number: number
+  startTime: string
+  endTime?: string
+  timestamp: number
+  playerNumber: number
   currentPlayerNumber: number
   players: ReadonlyArray<{
     name: string
@@ -22,7 +25,10 @@ export default (game: Game, playerId: string): PlayerView => {
   const { cardsInHand, cardsPlayed } = playerHands[player.number]
   const [ currentTrick, lastTrick ] = tricks.slice(Math.max(0, tricks.length - 2)).reverse()
   return {
-    number: player.number,
+    startTime: game.startTime,
+    endTime: game.endTime,
+    timestamp: game.timestamp,
+    playerNumber: player.number,
     currentPlayerNumber,
     players: game.players.map(({ name, number, points }) => ({
       name,

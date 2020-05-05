@@ -4,6 +4,7 @@ import gameMiddleware, { GameRequest } from './gameMiddleware'
 import getPlayerViewEndpoint from './getPlayerViewEndpoint'
 import bidEndpoint from './bidEndpoint'
 import playEndpoint from './playEndpoint'
+import pollForChangesEndpoint from './pollForChangesEndpoint'
 
 const createEndpoint = (fn: (req: Request, res: Response) => Promise<void>) =>
   async (req: Request, res: Response, next: NextFunction) => {
@@ -31,6 +32,11 @@ const endpointSpecs: ReadonlyArray<EndpointSpec> = [
     path: '/',
     method: 'post',
     endpoint: newGameEndpoint
+  },
+  {
+    path: `/poll/:gameId/:playerId/:timestamp`,
+    method: 'get',
+    endpoint: pollForChangesEndpoint
   },
   {
     path: gamePath,

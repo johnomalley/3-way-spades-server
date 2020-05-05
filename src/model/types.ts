@@ -47,6 +47,9 @@ export type Hand = Readonly<{
 
 export type Game = Readonly<{
   id: string
+  startTime: string
+  endTime?: string
+  timestamp: number
   winningScore: number
   players: ReadonlyArray<Player>
   hands: ReadonlyArray<Hand>
