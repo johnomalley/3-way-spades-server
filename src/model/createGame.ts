@@ -1,9 +1,17 @@
 import { Game, Hand } from './types'
-import createId from './createId'
 import createHand from './createHand'
 import bid from './bid'
 import last = require('lodash/last')
+import * as randomstring from 'randomstring'
 import moment = require('moment')
+import createGameId from './createGameId'
+
+const createPlayerId = (name: string): string =>
+  name.charAt(0).toUpperCase() + randomstring.generate({
+    charset: 'alphabetic',
+    length: 4,
+    capitalization: 'uppercase'
+  })
 
 export const defaultPlayerNames = [
   'Larry',
@@ -11,7 +19,7 @@ export const defaultPlayerNames = [
   'John'
 ]
 
-const maybeAddBidding = (game: Game, options: GameOptions):Game => {
+const maybeAddBidding = (game: Game, options: GameOptions): Game => {
   if (options.bids) {
     const { players } = game
     let result = game
@@ -36,7 +44,7 @@ export default (options: GameOptions = {}): Game => {
     throw new Error('bad player names')
   }
   const players = names.map((name, i) => ({
-    id: createId(),
+    id: createPlayerId(name),
     number: i,
     name,
     points: 0
@@ -44,7 +52,7 @@ export default (options: GameOptions = {}): Game => {
   const hand = options.firstHand || createHand({ playerCount: names.length })
   const now = moment()
   const game = {
-    id: createId(),
+    id: createGameId(),
     startTime: now.toISOString(),
     timestamp: now.valueOf(),
     winningScore: 500,

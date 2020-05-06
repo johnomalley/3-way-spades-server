@@ -8,6 +8,8 @@ describe('createGame', () => {
     expect(hands.length).toBe(1)
     expect(game).toEqual({
       id: game.id,
+      startTime: game.startTime,
+      timestamp: game.timestamp,
       winningScore: 500,
       players: defaultPlayerNames.map((name, i) => ({
         id: playerIds[i],

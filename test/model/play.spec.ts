@@ -96,6 +96,7 @@ describe('play', () => {
 
       expect(state).toEqual({
         ...game,
+        timestamp: state.timestamp,
         hands: [
           {
             ...hand,
