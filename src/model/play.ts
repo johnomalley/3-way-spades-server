@@ -95,6 +95,7 @@ const addNewHandOrEndGame = (game: Game) =>
     endTime: moment().toISOString()
   } : {
     ...game,
+    handCount: 1 + game.hands.length,
     hands: [
       ...game.hands,
       createHand({ firstToBid: nextPlayerNumber(game, last(game.hands)!.firstToBid) })

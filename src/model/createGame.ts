@@ -1,23 +1,18 @@
-import { Game, Hand } from './types'
+import { Game, Hand, BasePlayer } from './types'
 import createHand from './createHand'
 import bid from './bid'
-import last = require('lodash/last')
-import * as randomstring from 'randomstring'
-import moment = require('moment')
 import createGameId from './createGameId'
+import last = require('lodash/last')
+import moment = require('moment')
 
-const createPlayerId = (name: string): string =>
-  name.charAt(0).toUpperCase() + randomstring.generate({
-    charset: 'alphabetic',
-    length: 4,
-    capitalization: 'uppercase'
-  })
-
-export const defaultPlayerNames = [
+export const defaultPlayers = [
   'Larry',
   'Michael',
   'John'
-]
+].map(name => ({
+  id: name.toLowerCase(),
+  name
+}))
 
 const maybeAddBidding = (game: Game, options: GameOptions): Game => {
   if (options.bids) {
@@ -33,23 +28,24 @@ const maybeAddBidding = (game: Game, options: GameOptions): Game => {
 }
 
 export type GameOptions = Readonly<{
-  names?: ReadonlyArray<string>
+  creator?: string
+  players?: ReadonlyArray<BasePlayer>
   firstHand?: Hand
   bids?: number[]
 }>
 
 export default (options: GameOptions = {}): Game => {
-  const names = options.names || defaultPlayerNames
-  if (names.length !== defaultPlayerNames.length) {
+  const newPlayers = options.players || defaultPlayers
+  if (newPlayers.length !== defaultPlayers.length) {
     throw new Error('bad player names')
   }
-  const players = names.map((name, i) => ({
-    id: createPlayerId(name),
+  const players = newPlayers.map(({ id, name }, i) => ({
+    id,
     number: i,
     name,
     points: 0
   }))
-  const hand = options.firstHand || createHand({ playerCount: names.length })
+  const hand = options.firstHand || createHand({ playerCount: players.length })
   const now = moment()
   const game = {
     id: createGameId(),
@@ -57,6 +53,7 @@ export default (options: GameOptions = {}): Game => {
     timestamp: now.valueOf(),
     winningScore: 500,
     players,
+    handCount: 1,
     hands: [hand]
   }
   return maybeAddBidding(game, options)

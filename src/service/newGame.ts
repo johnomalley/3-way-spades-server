@@ -1,19 +1,13 @@
 import createGame from '../model/createGame'
+import { BasePlayer } from '../model/types'
 import { putGame } from './gameBucket'
 
 export type NewGameResult = Readonly<{
   id: string
-  players: ReadonlyArray<Readonly<{
-    id: string
-    name: string
-  }>>
 }>
 
-export default async (names: ReadonlyArray<string>): Promise<NewGameResult> => {
-  const game = createGame({ names })
+export default async (players?: ReadonlyArray<BasePlayer>): Promise<NewGameResult> => {
+  const game = createGame({ players })
   await putGame(game)
-  return {
-    id: game.id,
-    players: game.players.map(({ id, name }) => ({ id, name }))
-  }
+  return { id: game.id }
 }

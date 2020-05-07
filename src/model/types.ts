@@ -23,10 +23,13 @@ export type PlayerHand = Readonly<{
   cardsPlayed: ReadonlyArray<Card>
 }>
 
-export type Player = Readonly<{
+export type BasePlayer = Readonly<{
   id: string
-  number: number
   name: string
+}>
+
+export type Player = BasePlayer & Readonly<{
+  number: number
   points: number
 }>
 
@@ -45,13 +48,17 @@ export type Hand = Readonly<{
   tricks: ReadonlyArray<Trick>
 }>
 
-export type Game = Readonly<{
+export type BaseGame = Readonly<{
   id: string
   startTime: string
   endTime?: string
   timestamp: number
   winningScore: number
   players: ReadonlyArray<Player>
+  handCount: number
+}>
+
+export type Game = BaseGame & Readonly<{
   hands: ReadonlyArray<Hand>
 }>
 

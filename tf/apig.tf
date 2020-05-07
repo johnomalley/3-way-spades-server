@@ -3,8 +3,8 @@ resource "aws_api_gateway_api_key" "api" {
 }
 
 resource "aws_api_gateway_rest_api" "api" {
-  name        = "${var.namespace}-3-way-spades"
-  description = "Terraform Serverless Application Example"
+  name = "${var.namespace}-3-way-spades"
+  description = "3 way spades api"
 }
 
 resource "aws_api_gateway_usage_plan" "api" {

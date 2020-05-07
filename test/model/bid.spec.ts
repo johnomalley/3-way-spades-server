@@ -53,8 +53,10 @@ describe('bid', () => {
   })
 
   it('updates hand', () => {
-    expect(apply(3)).toEqual({
+    const result = apply(3)
+    expect(result).toEqual({
       ...game,
+      timestamp: result.timestamp,
       hands: [
         {
           ...hand,
