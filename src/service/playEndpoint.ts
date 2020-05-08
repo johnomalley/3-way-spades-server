@@ -3,7 +3,7 @@ import { GameRequest } from './gameMiddleware'
 import { Card, Suit } from '../model/types'
 import play from '../model/play'
 import getPlayerView from './getPlayerView'
-import { endGame, putGame } from './gameBucket'
+import { putGame } from './gameBucket'
 
 const parseBody = (body: any): { status?: number, message?: string, card?: Card } => {
   const { rank, suit } = body
@@ -26,9 +26,6 @@ export default async ({ body, game, playerId }: GameRequest, res: Response) => {
   } else {
     const newGame = play(game, playerId, card!)
     await putGame(newGame)
-    if (newGame.endTime) {
-      await endGame(newGame)
-    }
     res.json(getPlayerView(newGame, playerId))
   }
 }
