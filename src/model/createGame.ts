@@ -1,4 +1,4 @@
-import { Game, Hand, BasePlayer } from './types'
+import { BasePlayer, Game, Hand } from './types'
 import createHand from './createHand'
 import bid from './bid'
 import createGameId from './createGameId'
@@ -43,7 +43,8 @@ export default (options: GameOptions = {}): Game => {
     id,
     number: i,
     name,
-    points: 0
+    points: 0,
+    pointsPerHand: []
   }))
   const hand = options.firstHand || createHand({ playerCount: players.length })
   const now = moment()

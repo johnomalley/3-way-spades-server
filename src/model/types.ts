@@ -31,6 +31,7 @@ export type BasePlayer = Readonly<{
 export type Player = BasePlayer & Readonly<{
   number: number
   points: number
+  pointsPerHand: ReadonlyArray<number>
 }>
 
 export enum HandPhase {

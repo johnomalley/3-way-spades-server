@@ -72,6 +72,18 @@ const playSubsequentTrick = (game: Game, player: Player, card: Card): Game => {
 
 const isHandComplete = (hand: Hand) => hand.tricks.length === 17 && last(hand.tricks)!.winner !== undefined
 
+const scorePlayer = (hand: Hand, player: Player): Player => {
+  const score = getHandScore(player, hand.playerHands[player.number])
+  return {
+    ...player,
+    points: player.points + score,
+    pointsPerHand: [
+      ...player.pointsPerHand,
+      score
+    ]
+  }
+}
+
 const scoreHand = (game: Game, hand: Hand): Game => ({
   ...game,
   hands: [
@@ -81,10 +93,7 @@ const scoreHand = (game: Game, hand: Hand): Game => ({
       phase: HandPhase.Complete
     }
   ],
-  players: game.players.map(player => ({
-    ...player,
-    points: player.points + getHandScore(player, hand.playerHands[player.number])
-  }))
+  players: game.players.map(_ => scorePlayer(hand, _))
 })
 
 const isGameComplete = (game: Game) => game.players.some(_ => _.points >= game.winningScore)

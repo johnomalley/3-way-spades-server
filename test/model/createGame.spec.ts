@@ -14,7 +14,8 @@ describe('createGame', () => {
         id,
         number: i,
         name,
-        points: 0
+        points: 0,
+        pointsPerHand: []
       })),
       handCount: 1,
       hands
