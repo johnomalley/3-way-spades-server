@@ -20,6 +20,7 @@ describe('getPlayerView', () => {
     expect(apply()).toEqual({
       cardsInHand: [],
       cardsPlayed: [],
+      cardsVisible: false,
       currentPlayerNumber: player.number,
       gameId: game.id,
       phase: hand.phase,
@@ -38,7 +39,9 @@ describe('getPlayerView', () => {
 
   it('includes cards when shown', () => {
     game = showHand(game, player.id)
+    const { cardsInHand, cardsVisible } = apply()
 
-    expect(apply().cardsInHand).toBe(hand.playerHands[player.number].cardsInHand)
+    expect(cardsInHand).toBe(hand.playerHands[player.number].cardsInHand)
+    expect(cardsVisible).toBe(true)
   })
 })

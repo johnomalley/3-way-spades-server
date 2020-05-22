@@ -16,6 +16,7 @@ export type PlayerView = Readonly<{
     bid?: number
     trickCount: number
   }>
+  cardsVisible: boolean
   cardsInHand: ReadonlyArray<Card>
   cardsPlayed: ReadonlyArray<Card>
   tricks: ReadonlyArray<Trick>
@@ -47,6 +48,7 @@ export default (game: Game, playerId: string): PlayerView => {
     phase,
     currentPlayerNumber,
     players: game.players.map(toPlayerViewPlayer),
+    cardsVisible,
     cardsInHand: cardsVisible ? cardsInHand : [],
     cardsPlayed,
     tricks
