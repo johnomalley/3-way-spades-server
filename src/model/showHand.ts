@@ -1,12 +1,11 @@
 import { Game } from './types'
-import getCurrentPlayer from './getCurrentPlayer'
 import updateCurrentHand from './updateCurrentHand'
 import validationError from './validationError'
 import last = require('lodash/last')
 
 export default (game: Game, playerId: string): Game => {
   const hand = last(game.hands)!
-  const player = getCurrentPlayer(game, playerId)
+  const player = game.players.find(_ => _.id === playerId)!
 
   const playerHand = hand.playerHands[player.number]
   if (playerHand.cardsVisible) {
