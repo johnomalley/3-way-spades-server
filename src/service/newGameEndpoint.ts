@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import newGame from './newGame'
 import { BasePlayer } from '../model/types'
 import { ValidateResult } from './types'
+import { acquireLock, tryReleaseLock } from './stateLock'
 import isString = require('lodash/isString')
 import isObject = require('lodash/isObject')
 
@@ -49,10 +50,15 @@ const parseBody = (req: Request): ValidateResult & { players?: ReadonlyArray<Bas
 }
 
 export default async (req: Request, res: Response) => {
-  const { players, status, message } = parseBody(req)
-  if (status) {
-    res.status(status).json({ message })
-  } else {
-    res.json(await newGame(players))
+  await acquireLock('global')
+  try {
+    const { players, status, message } = parseBody(req)
+    if (status) {
+      res.status(status).json({ message })
+    } else {
+      res.json(await newGame(players))
+    }
+  } finally {
+    await tryReleaseLock('global')
   }
 }

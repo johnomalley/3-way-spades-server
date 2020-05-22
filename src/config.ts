@@ -1,9 +1,7 @@
 import * as process from 'process'
 
 export type Config = Readonly<{
-  tables: Readonly<{
-    game: string
-  }>
+  stateLockTable: string
   gameStateBucket: string
   originWhitelist: ReadonlyArray<RegExp>
 }>
@@ -11,9 +9,7 @@ export type Config = Readonly<{
 const namespace = process.env.NAMESPACE || 'omalley'
 
 const config: Config = {
-  tables: {
-    game: process.env.GAME_TABLE_NAME || `${namespace}-3-way-spades-game`
-  },
+  stateLockTable: process.env.STATE_LOCK_TABLE || `${namespace}-state-lock`,
   gameStateBucket: process.env.GAME_STATE_BUCKET || `${namespace}-3-way-spades.ocelotconsulting.com`,
   originWhitelist: [
     /^http:\/\/localhost:\d+$/,

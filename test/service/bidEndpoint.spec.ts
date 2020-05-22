@@ -8,6 +8,7 @@ import createGame from '../../src/model/createGame'
 jest.mock('../../src/model/bid')
 jest.mock('../../src/service/getPlayerView')
 jest.mock('../../src/service/gameBucket')
+jest.mock('../../src/service/stateLock')
 
 describe('bid', () => {
   const mocks = {
