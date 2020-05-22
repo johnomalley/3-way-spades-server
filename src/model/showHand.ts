@@ -1,8 +1,8 @@
 import { Game } from './types'
 import getCurrentPlayer from './getCurrentPlayer'
 import updateCurrentHand from './updateCurrentHand'
-import last = require('lodash/last')
 import validationError from './validationError'
+import last = require('lodash/last')
 
 export default (game: Game, playerId: string): Game => {
   const hand = last(game.hands)!

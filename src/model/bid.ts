@@ -1,8 +1,8 @@
 import { Game, Hand, HandPhase, Player } from './types'
 import getCurrentPlayer from './getCurrentPlayer'
 import updateCurrentHand from './updateCurrentHand'
-import last = require('lodash/last')
 import validationError from './validationError'
+import last = require('lodash/last')
 
 const isCardsVisible = (hand: Hand, player: Player): boolean => hand.playerHands[player.number].cardsVisible
 

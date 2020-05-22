@@ -9,10 +9,10 @@ import updatePlayerHands from './updatePlayerHands'
 import nextPlayerNumber from './nextPlayerNumber'
 import createHand from './createHand'
 import getHandScore from './getHandScore'
+import validationError from './validationError'
 import last = require('lodash/last')
 import initial = require('lodash/initial')
 import moment = require('moment')
-import validationError from './validationError'
 
 const validateCard = (hand: Hand, player: Player, card: Card) => {
   const cardInHand = hand.playerHands[player.number]!.cardsInHand.find(_ =>

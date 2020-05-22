@@ -21,7 +21,6 @@ export type PlayerView = Readonly<{
   tricks: ReadonlyArray<Trick>
 }>
 
-
 export default (game: Game, playerId: string): PlayerView => {
   const player = game.players.find(_ => _.id === playerId)!
   const { currentPlayerNumber, playerHands, tricks, phase } = last(game.hands)!

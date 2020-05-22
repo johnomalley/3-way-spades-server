@@ -2,9 +2,9 @@ import { BasePlayer, Game, Hand } from './types'
 import createHand from './createHand'
 import bid from './bid'
 import createGameId from './createGameId'
+import validationError from './validationError'
 import last = require('lodash/last')
 import moment = require('moment')
-import validationError from './validationError'
 
 export const defaultPlayers = [
   'Larry',

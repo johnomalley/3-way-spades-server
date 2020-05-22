@@ -1,10 +1,10 @@
 import { Response } from 'express'
-import isNumber = require('lodash/isNumber')
 import { GameRequest } from './gameMiddleware'
 import bid from '../model/bid'
 import getPlayerView from './getPlayerView'
 import { putGame } from './gameBucket'
 import { ValidateResult } from './types'
+import isNumber = require('lodash/isNumber')
 
 const parseBody = ({ value }: any): ValidateResult & { value?: number } => {
   if (isNumber(value)) {

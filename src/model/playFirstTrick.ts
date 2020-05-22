@@ -6,9 +6,9 @@ import updateCurrentHand from './updateCurrentHand'
 import updatePlayerHands from './updatePlayerHands'
 import nextPlayerNumber from './nextPlayerNumber'
 import emptyTrick from './emptyTrick'
+import validationError from './validationError'
 import isEqual = require('lodash/isEqual')
 import last = require('lodash/last')
-import validationError from './validationError'
 
 const validate = (player: Player, playerHand: PlayerHand, card: Card) => {
   const smallestClub = getSmallestClub(playerHand)

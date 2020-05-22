@@ -1,6 +1,6 @@
 import { Game, Player } from './types'
-import last = require('lodash/last')
 import validationError from './validationError'
+import last = require('lodash/last')
 
 const isComplete = (game: Game) => game.players.some(_ => _.points >= game.winningScore)
 
