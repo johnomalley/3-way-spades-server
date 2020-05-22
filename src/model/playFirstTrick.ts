@@ -8,13 +8,14 @@ import nextPlayerNumber from './nextPlayerNumber'
 import emptyTrick from './emptyTrick'
 import isEqual = require('lodash/isEqual')
 import last = require('lodash/last')
+import validationError from './validationError'
 
 const validate = (player: Player, playerHand: PlayerHand, card: Card) => {
   const smallestClub = getSmallestClub(playerHand)
   if (smallestClub && !isEqual(smallestClub, card)) {
-    throw new Error(`Player ${player.name} must play ${cardDisplayValue(smallestClub)} on the first trick`)
+    throw validationError(`Player ${player.name} must play ${cardDisplayValue(smallestClub)} on the first trick`)
   } else if (card.suit === Suit.Spades) {
-    throw new Error(`Player ${player.name} cannot play spades on the first trick!`)
+    throw validationError(`Player ${player.name} cannot play spades on the first trick!`)
   }
 }
 

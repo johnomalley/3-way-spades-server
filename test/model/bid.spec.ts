@@ -2,6 +2,7 @@ import createGame from '../../src/model/createGame'
 import { Game, Hand, HandPhase } from '../../src/model/types'
 import bid from '../../src/model/bid'
 import last = require('lodash/last')
+import showHand from '../../src/model/showHand'
 
 describe('bid', () => {
   let game: Game
@@ -34,6 +35,13 @@ describe('bid', () => {
     expectOutOfRange(-2)
   })
 
+  it('rejects bid of -1 when player hand has been shown', () => {
+    game = showHand(game, playerId)
+    expect(() => bid(game, playerId, -1)).toThrow(
+      `Bid of -1 by player ${game.players[hand.currentPlayerNumber].name} is invalid - cards have already been shown`
+    )
+  })
+
   const completeBidding = () => {
     const { players } = game
     let playerNumber = hand.currentPlayerNumber
@@ -62,7 +70,7 @@ describe('bid', () => {
           ...hand,
           currentPlayerNumber: (hand.currentPlayerNumber + 1) % 3,
           playerHands: hand.playerHands.map((playerHand, i) =>
-            i === hand.currentPlayerNumber ? { ...playerHand, bid: 3 } : playerHand
+            i === hand.currentPlayerNumber ? { ...playerHand, bid: 3, cardsVisible: true } : playerHand
           )
         }
       ]

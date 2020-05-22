@@ -1,16 +1,17 @@
 import { Game, Player } from './types'
 import last = require('lodash/last')
+import validationError from './validationError'
 
 const isComplete = (game: Game) => game.players.some(_ => _.points >= game.winningScore)
 
-export default (game: Game, expectedPlayerId: string): Player => {
+export default (game: Game, playerId: string): Player => {
   if (isComplete(game)) {
-    throw new Error(`Game ${game.id} has been completed`)
+    throw validationError(`Game ${game.id} has been completed`)
   } else {
     const hand = last(game.hands)
     const player = game.players[hand!.currentPlayerNumber]!
-    if (player.id !== expectedPlayerId) {
-      throw new Error(`Invalid player id: ${expectedPlayerId}`)
+    if (player.id !== playerId) {
+      throw validationError(`Invalid player id: ${playerId} - should be ${player.id}`)
     } else {
       return player
     }

@@ -7,43 +7,6 @@ import { cardDisplayValue } from '../../src/model/display'
 import { Card, Game, HandPhase, PlayerHand, Suit } from '../../src/model/types'
 
 describe('play', () => {
-  // let game: Game
-  // let hand: Hand
-
-  // const cards = [
-  //   [
-  //     {
-  //       rank: 14,
-  //       suit: Suit.Spades
-  //     },
-  //     {
-  //       rank: 10,
-  //       suit: Suit.Spades
-  //     }
-  //   ]
-  // ]
-
-  // const createGameAndCompleteBidding = (bids = [3, 4, 5]) => {
-  //   let newGame = createGame()
-  //   let playerNumber = last(newGame.hands)!.currentPlayerNumber
-  //   for (const value of bids) {
-  //     newGame = bid(newGame, newGame.players[playerNumber].id, value)
-  //     playerNumber = (playerNumber + 1) % 3
-  //   }
-  //   return newGame
-  // }
-  //
-  // beforeEach(() => {
-  //   game = createGameAndCompleteBidding()
-  //   hand = last(game.hands)!
-  //   console.log(hand.phase)
-  // })
-  //
-  // it('', () => {
-  //
-  // })
-
-
   describe('first trick', () => {
     const options = {
       firstToBid: 0,
@@ -105,6 +68,7 @@ describe('play', () => {
             playerHands: hand.playerHands.map((playerHand, i) => ({
               ...playerHand,
               bid: 3,
+              cardsVisible: true,
               cardsInHand: playerHand.cardsInHand.filter(_ => !isEqual(_, trick.cards[i])),
               cardsPlayed: [trick.cards[i]],
               trickCount: i === trick.winner ? 1 : 0

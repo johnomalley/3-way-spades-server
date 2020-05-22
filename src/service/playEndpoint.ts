@@ -1,16 +1,17 @@
 import { Response } from 'express'
 import { GameRequest } from './gameMiddleware'
-import { Card, Suit } from '../model/types'
+import { Card } from '../model/types'
 import play from '../model/play'
 import getPlayerView from './getPlayerView'
 import { putGame } from './gameBucket'
+import { ValidateResult } from './types'
 
-const parseBody = (body: any): { status?: number, message?: string, card?: Card } => {
+const parseBody = (body: any): ValidateResult & { card?: Card } => {
   const { rank, suit } = body
   if (Number.isInteger(rank) && Number.isInteger(suit)) {
-    const card = { rank, suit } as Card
-    if (rank >= 2 && rank <= 14 && suit >= Suit.Diamonds && suit <= Suit.Spades) {
-      return { card }
+    // no need to validate - built into the play fn
+    return {
+      card: { rank, suit } as Card
     }
   }
   return {

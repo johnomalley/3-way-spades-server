@@ -3,9 +3,9 @@ import { Player, PlayerHand } from './types'
 const getBidPoints = (bid: number) => {
   switch (bid) {
     case -1:
-      return 200
+      return 300
     case 0:
-      return 100
+      return 150
     default:
       return 10 * bid
   }

@@ -19,6 +19,7 @@ export type Trick = Readonly<{
 export type PlayerHand = Readonly<{
   bid?: number
   trickCount: number
+  cardsVisible: boolean
   cardsInHand: ReadonlyArray<Card>
   cardsPlayed: ReadonlyArray<Card>
 }>
@@ -64,3 +65,5 @@ export type Game = BaseGame & Readonly<{
 }>
 
 export type Distributions = ReadonlyArray<ReadonlyArray<number>>
+
+export type ValidationError = Error & Readonly<{ statusCode?: number }>

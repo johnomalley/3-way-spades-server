@@ -12,13 +12,14 @@ import getHandScore from './getHandScore'
 import last = require('lodash/last')
 import initial = require('lodash/initial')
 import moment = require('moment')
+import validationError from './validationError'
 
 const validateCard = (hand: Hand, player: Player, card: Card) => {
   const cardInHand = hand.playerHands[player.number]!.cardsInHand.find(_ =>
     _.rank === card.rank && _.suit === card.suit
   )
   if (!cardInHand) {
-    throw new Error(`Player '${player.name}' does not have card in hand: ${cardDisplayValue(card)}`)
+    throw validationError(`Player '${player.name}' does not have card in hand: ${cardDisplayValue(card)}`)
   }
 }
 
@@ -30,14 +31,14 @@ const playerMustLeadSpades = (playerHand: PlayerHand) =>
 
 const validateLead = (player: Player, playerHand: PlayerHand, card: Card, tricks: ReadonlyArray<Trick>) => {
   if (card.suit === Suit.Spades && !spadesBroken(tricks) && !playerMustLeadSpades(playerHand)) {
-    throw new Error(`Player ${player.name} may not lead spades until broken - has other cards to lead`)
+    throw validationError(`Player ${player.name} may not lead spades until broken - has other cards to lead`)
   }
 }
 
 const validateFollowSuit = (player: Player, playerHand: PlayerHand, card: Card, suit: Suit) => {
   if (card.suit !== suit) {
     if (playerHand.cardsInHand.some(_ => _.suit === suit)) {
-      throw new Error(`Player ${player.number} failed to follow suit: ${cardDisplayValue(card)}`)
+      throw validationError(`Player ${player.number} failed to follow suit: ${cardDisplayValue(card)}`)
     }
   }
 }
@@ -116,7 +117,7 @@ export default (game: Game, playerId: string, card: Card): Game => {
   const player = getCurrentPlayer(game, playerId)
   const hand = last(game.hands)!
   if (hand.phase !== HandPhase.Play) {
-    throw new Error(`Hand is not currently in the play phase: ${hand.phase}`)
+    throw validationError(`Hand is not currently in the play phase: ${hand.phase}`)
   }
   validateCard(hand, player, card)
   const lastTrick = last(hand.tricks)

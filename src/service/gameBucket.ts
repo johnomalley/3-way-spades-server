@@ -1,7 +1,7 @@
-import omit = require('lodash/omit')
 import config from '../config'
 import { BaseGame, Game } from '../model/types'
 import s3 from './s3'
+import omit = require('lodash/omit')
 
 const { gameStateBucket } = config
 

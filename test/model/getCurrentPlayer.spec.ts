@@ -18,7 +18,9 @@ describe('getCurrentPlayer', () => {
 
   it('throws error when id does not match', () => {
     const id = game.players[1].id
-    expect(() => getCurrentPlayer(game, id)).toThrow(`Invalid player id: ${id}`)
+    expect(() => getCurrentPlayer(game, id)).toThrow(
+      `Invalid player id: ${id} - should be ${game.players[0].id}`
+    )
   })
 
   it('throws error when the game is over', () => {

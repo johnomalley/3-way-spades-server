@@ -1,5 +1,5 @@
-import * as S3 from 'aws-sdk/clients/s3'
-import { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3'
+import * as S3 from 'aws-sdk/clients/s3' // eslint-disable-line
+import { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3' // eslint-disable-line
 
 let sharedClient: S3
 

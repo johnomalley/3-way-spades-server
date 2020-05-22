@@ -10,11 +10,13 @@ describe('getHandScore', () => {
       id: 'X',
       number: 0,
       name: 'Test',
-      points: 0
+      points: 0,
+      pointsPerHand: []
     }
     playerHand = {
       bid: 3,
       trickCount: 5,
+      cardsVisible: false,
       cardsInHand: [],
       cardsPlayed: []
     }
@@ -33,7 +35,7 @@ describe('getHandScore', () => {
       trickCount: 1
     }
 
-    expect(apply()).toBe(-200)
+    expect(apply()).toBe(-300)
   })
 
   it('scores -100 for missing nil', () => {
@@ -43,7 +45,7 @@ describe('getHandScore', () => {
       trickCount: 5
     }
 
-    expect(apply()).toBe(-100)
+    expect(apply()).toBe(-150)
   })
 
   it('applies double penalty for double bagging out', () => {

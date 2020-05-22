@@ -1,4 +1,4 @@
-import { Card, Game, HandPhase, Trick } from '../model/types'
+import { Card, Game, HandPhase, Player, Trick } from '../model/types'
 import last = require('lodash/last')
 
 export type PlayerView = Readonly<{
@@ -21,26 +21,34 @@ export type PlayerView = Readonly<{
   tricks: ReadonlyArray<Trick>
 }>
 
+
 export default (game: Game, playerId: string): PlayerView => {
   const player = game.players.find(_ => _.id === playerId)!
   const { currentPlayerNumber, playerHands, tricks, phase } = last(game.hands)!
-  const { cardsInHand, cardsPlayed } = playerHands[player.number]
+  const { cardsInHand, cardsPlayed, cardsVisible } = playerHands[player.number]
+  const { endTime } = game
+
+  const toPlayerViewPlayer = ({ name, number, points, pointsPerHand }: Player) => {
+    const { bid, trickCount } = playerHands[number]
+    return {
+      name,
+      points,
+      pointsPerHand,
+      ...(bid === undefined ? {} : { bid }),
+      trickCount
+    }
+  }
+
   return {
     gameId: game.id,
     startTime: game.startTime,
-    endTime: game.endTime,
+    ...(endTime ? { endTime } : {}),
     timestamp: game.timestamp,
     playerNumber: player.number,
     phase,
     currentPlayerNumber,
-    players: game.players.map(({ name, number, points, pointsPerHand }) => ({
-      name,
-      points,
-      pointsPerHand,
-      bid: playerHands[number].bid,
-      trickCount: playerHands[number].trickCount
-    })),
-    cardsInHand,
+    players: game.players.map(toPlayerViewPlayer),
+    cardsInHand: cardsVisible ? cardsInHand : [],
     cardsPlayed,
     tricks
   }

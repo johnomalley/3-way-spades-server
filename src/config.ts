@@ -16,7 +16,8 @@ const config: Config = {
   },
   gameStateBucket: process.env.GAME_STATE_BUCKET || `${namespace}-3-way-spades.ocelotconsulting.com`,
   originWhitelist: [
-    /^http:\/\/localhost:\d+$/
+    /^http:\/\/localhost:\d+$/,
+    /^http:\/\/larry-john-michael-spades.s3-website.us-east-2.amazonaws.com/
   ]
 }
 

@@ -1,13 +1,16 @@
 import { Response } from 'express'
+import isNumber = require('lodash/isNumber')
 import { GameRequest } from './gameMiddleware'
 import bid from '../model/bid'
 import getPlayerView from './getPlayerView'
 import { putGame } from './gameBucket'
+import { ValidateResult } from './types'
 
-const parseBody = ({ value }: any): { status?: number, message?: string, value?: number } => {
-  if (Number.isInteger(value) && value >= -1 && value < 17) {
+const parseBody = ({ value }: any): ValidateResult & { value?: number } => {
+  if (isNumber(value)) {
     return { value }
   } else {
+    // don't redundantly validate the number - bid does that already
     return {
       status: 400,
       message: `Bid value is missing or invalid: ${value}`

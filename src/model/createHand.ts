@@ -53,6 +53,7 @@ const deal = (deck: ReadonlyArray<Card>, options: HandOptions): ReadonlyArray<Pl
     cardsInHand.sort(cardSortComparator)
     return {
       trickCount: 0,
+      cardsVisible: false,
       cardsInHand,
       cardsPlayed: []
     }

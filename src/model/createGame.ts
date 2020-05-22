@@ -4,6 +4,7 @@ import bid from './bid'
 import createGameId from './createGameId'
 import last = require('lodash/last')
 import moment = require('moment')
+import validationError from './validationError'
 
 export const defaultPlayers = [
   'Larry',
@@ -37,7 +38,7 @@ export type GameOptions = Readonly<{
 export default (options: GameOptions = {}): Game => {
   const newPlayers = options.players || defaultPlayers
   if (newPlayers.length !== defaultPlayers.length) {
-    throw new Error('bad player names')
+    throw validationError('bad player names')
   }
   const players = newPlayers.map(({ id, name }, i) => ({
     id,

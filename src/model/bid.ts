@@ -1,14 +1,17 @@
-import { Game, HandPhase } from './types'
+import { Game, Hand, HandPhase, Player } from './types'
 import getCurrentPlayer from './getCurrentPlayer'
 import updateCurrentHand from './updateCurrentHand'
 import last = require('lodash/last')
+import validationError from './validationError'
+
+const isCardsVisible = (hand: Hand, player: Player): boolean => hand.playerHands[player.number].cardsVisible
 
 export default (game: Game, playerId: string, bid: number): Game => {
   const player = getCurrentPlayer(game, playerId)
   const hand = last(game.hands)!
 
   const error = (message: string) =>
-    new Error(`Bid of ${bid} by player ${player.name} is invalid - ${message}`)
+    validationError(`Bid of ${bid} by player ${player.name} is invalid - ${message}`)
 
   if (!Number.isInteger(bid)) {
     throw error('must be an integer')
@@ -16,9 +19,11 @@ export default (game: Game, playerId: string, bid: number): Game => {
     throw error('must be between -1 and 17')
   } else if (hand.phase !== HandPhase.Bidding) {
     throw error('bidding is over')
+  } else if (bid === -1 && isCardsVisible(hand, player)) {
+    throw error('cards have already been shown')
   } else {
     const playerHands = hand.playerHands.map((playerHand, i) =>
-      i === player.number ? { ...playerHand, bid } : playerHand
+      i === player.number ? { ...playerHand, bid, cardsVisible: true } : playerHand
     )
     const biddingComplete = playerHands.every(_ => _.bid !== undefined)
     const phase = biddingComplete ? HandPhase.Play : HandPhase.Bidding
