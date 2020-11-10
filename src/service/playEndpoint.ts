@@ -1,11 +1,10 @@
-import { Response } from 'express'
-import { GameRequest } from './gameMiddleware'
+import { Request, Response } from 'express'
 import { Card } from '../model/types'
 import play from '../model/play'
 import getPlayerView from './getPlayerView'
 import { putGame } from './gameBucket'
 import { ValidateResult } from './types'
-import { tryReleaseLock } from './stateLock'
+import withGame from './withGame'
 
 const parseBody = (body: any): ValidateResult & { card?: Card } => {
   const { rank, suit } = body
@@ -21,9 +20,9 @@ const parseBody = (body: any): ValidateResult & { card?: Card } => {
   }
 }
 
-export default async ({ body, game, playerId }: GameRequest, res: Response) => {
-  try {
-    const { status, message, card } = parseBody(body)
+export default async (req: Request, res: Response) => {
+  await withGame(req, res, async (game, playerId) => {
+    const { status, message, card } = parseBody(req.body)
     if (status) {
       res.status(status).json({ message })
     } else {
@@ -31,7 +30,5 @@ export default async ({ body, game, playerId }: GameRequest, res: Response) => {
       await putGame(newGame)
       res.json(getPlayerView(newGame, playerId))
     }
-  } finally {
-    await tryReleaseLock(game.id)
-  }
+  })
 }

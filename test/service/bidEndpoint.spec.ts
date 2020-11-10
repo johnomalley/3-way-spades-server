@@ -4,15 +4,17 @@ import getPlayerView from '../../src/service/getPlayerView'
 import { putGame } from '../../src/service/gameBucket'
 import { Game, Player } from '../../src/model/types'
 import createGame from '../../src/model/createGame'
+import withGame from '../../src/service/withGame'
 
 jest.mock('../../src/model/bid')
 jest.mock('../../src/service/getPlayerView')
 jest.mock('../../src/service/gameBucket')
-jest.mock('../../src/service/stateLock')
+jest.mock('../../src/service/withGame')
 
 describe('bid', () => {
   const mocks = {
     bid: bid as jest.Mock,
+    withGame: withGame as jest.Mock,
     putGame: putGame as jest.Mock,
     getPlayerView: getPlayerView as jest.Mock,
     status: jest.fn(),
@@ -44,7 +46,11 @@ describe('bid', () => {
     Object.values(mocks).forEach(_ => _.mockReset())
   })
 
-  const apply = () => bidEndpoint({ body, game, playerId: player.id } as any, res)
+  const apply = async () => {
+    await bidEndpoint({ body } as any, res)
+    const callback = mocks.withGame.mock.calls[0][2]
+    await callback(game, player.id)
+  }
 
   it('responds with 400 when value is not a number', async () => {
     await apply()

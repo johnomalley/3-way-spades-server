@@ -132,6 +132,5 @@ describe('play', () => {
         expect(last(result.hands)!.phase).toBe(HandPhase.Complete)
       }
     })
-
   })
 })

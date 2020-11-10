@@ -2,7 +2,7 @@ import { Game, Player } from '../../src/model/types'
 import createGame from '../../src/model/createGame'
 import showHand from '../../src/model/showHand'
 
-describe('showHand', () => {
+xdescribe('showHand', () => {
   let game: Game
   let player: Player
 

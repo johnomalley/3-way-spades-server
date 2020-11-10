@@ -1,6 +1,5 @@
 import { Express, Request, Response, NextFunction } from 'express'
 import newGameEndpoint from './newGameEndpoint'
-import gameMiddleware, { GameRequest } from './gameMiddleware'
 import getPlayerViewEndpoint from './getPlayerViewEndpoint'
 import bidEndpoint from './bidEndpoint'
 import playEndpoint from './playEndpoint'
@@ -19,9 +18,7 @@ const createEndpoint = (fn: (req: Request, res: Response) => Promise<void>) =>
 
 const gamePath = '/game/:gameId/player/:playerId'
 
-type SimpleEndpoint = (req: Request, res: Response) => Promise<void>
-type GameEndpoint = (req: GameRequest, res: Response) => Promise<void>
-type Endpoint = SimpleEndpoint | GameEndpoint
+type Endpoint = (req: Request, res: Response) => Promise<void>
 
 type EndpointSpec = Readonly<{
   path: string
@@ -68,7 +65,6 @@ const endpointSpecs: ReadonlyArray<EndpointSpec> = [
 ]
 
 export default (app: Express) => {
-  app.use(gamePath, gameMiddleware)
   for (const spec of endpointSpecs) {
     app[spec.method](spec.path, createEndpoint(spec.endpoint))
   }

@@ -1,10 +1,9 @@
-import { Response } from 'express'
-import { GameRequest } from './gameMiddleware'
+import { Request, Response } from 'express'
 import bid from '../model/bid'
 import getPlayerView from './getPlayerView'
 import { putGame } from './gameBucket'
 import { ValidateResult } from './types'
-import { tryReleaseLock } from './stateLock'
+import withGame from './withGame'
 import isNumber = require('lodash/isNumber')
 
 const parseBody = ({ value }: any): ValidateResult & { value?: number } => {
@@ -19,9 +18,9 @@ const parseBody = ({ value }: any): ValidateResult & { value?: number } => {
   }
 }
 
-export default async ({ body, game, playerId }: GameRequest, res: Response) => {
-  try {
-    const { status, message, value } = parseBody(body)
+export default async (req: Request, res: Response) => {
+  await withGame(req, res, async (game, playerId) => {
+    const { status, message, value } = parseBody(req.body)
     if (status) {
       res.status(status).json({ message })
     } else {
@@ -29,7 +28,5 @@ export default async ({ body, game, playerId }: GameRequest, res: Response) => {
       await putGame(newGame)
       res.json(getPlayerView(newGame, playerId))
     }
-  } finally {
-    await tryReleaseLock(game.id)
-  }
+  })
 }

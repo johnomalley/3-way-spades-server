@@ -9,13 +9,29 @@ describe('bid', () => {
   let hand: Hand
   let playerId: string
 
-  beforeEach(() => {
-    game = createGame()
+  const updateHandAndPlayerId = () => {
     hand = last(game.hands)!
     playerId = game.players[hand.currentPlayerNumber].id
+  }
+
+  beforeEach(() => {
+    game = createGame()
+    updateHandAndPlayerId()
   })
 
-  const apply = (value: number) => bid(game, playerId, value)
+  const showPlayerHand = (): Game => {
+    if (!hand.playerHands[hand.currentPlayerNumber].cardsVisible) {
+      game = showHand(game, playerId)
+      updateHandAndPlayerId()
+    }
+    return game
+  }
+
+  const apply = (value: number) => {
+    game = bid(value == -1 ? game : showPlayerHand(), playerId, value)
+    updateHandAndPlayerId()
+    return game
+  }
 
   it('rejects non integer values', () => {
     const value = 1.32
@@ -61,6 +77,7 @@ describe('bid', () => {
   })
 
   it('updates hand', () => {
+    const { currentPlayerNumber, playerHands } = hand
     const result = apply(3)
     expect(result).toEqual({
       ...game,
@@ -68,9 +85,9 @@ describe('bid', () => {
       hands: [
         {
           ...hand,
-          currentPlayerNumber: (hand.currentPlayerNumber + 1) % 3,
-          playerHands: hand.playerHands.map((playerHand, i) =>
-            i === hand.currentPlayerNumber ? { ...playerHand, bid: 3, cardsVisible: true } : playerHand
+          currentPlayerNumber: (currentPlayerNumber + 1) % 3,
+          playerHands: playerHands.map((playerHand, i) =>
+            i === currentPlayerNumber ? { ...playerHand, bid: 3, cardsVisible: true } : playerHand
           )
         }
       ]
@@ -81,5 +98,26 @@ describe('bid', () => {
     completeBidding()
 
     expect(hand.phase).toBe(HandPhase.Play)
+  })
+
+  describe('double nil', () => {
+    it('rejects bid of DN when player hand has been shown', () => {
+      showPlayerHand()
+      expect(() => bid(game, playerId, -1)).toThrow(
+        `Bid of -1 by player ${game.players[hand.currentPlayerNumber].name} is invalid - cards have already been shown`
+      )
+    })
+
+    it('makes all cards visible', () => {
+      apply(-1)
+      expect(hand.playerHands.every(_ => _.cardsVisible)).toBe(true)
+    })
+
+    it('is not enabled - all cards become visible - when count is > 15', () => {
+      apply(8)
+      apply(8)
+
+      expect(hand.playerHands.every(_ => _.cardsVisible)).toBe(true)
+    })
   })
 })

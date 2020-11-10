@@ -1,8 +1,9 @@
-import { Response } from 'express'
-import { GameRequest } from './gameMiddleware'
+import { Request, Response } from 'express'
 import getPlayerView from './getPlayerView'
+import withGame from './withGame'
 
-// async just because createEndpoint requires it
-export default async ({ game, playerId }: GameRequest, res: Response) => {
-  res.json(getPlayerView(game, playerId))
+export default async (req: Request, res: Response) => {
+  await withGame(req, res, async (game, playerId) => {
+    res.json(getPlayerView(game, playerId))
+  })
 }

@@ -7,41 +7,43 @@ const client = new DocumentClient()
 const isConditionalCheckFailed = (error: any) =>
   error.statusCode === 400 && error.code === 'ConditionalCheckFailedException'
 
-export const acquireLock = async (lockId: string, retriesRemaining: number = 10): Promise<void> => {
+const withRetry = async (description: string, fn: () => Promise<void>, retriesRemaining: number = 10) => {
   try {
-    await client.put({
-      TableName: config.stateLockTable,
-      Item: { LockID: lockId },
-      ConditionExpression: 'attribute_not_exists(LockID)'
-    }).promise()
+    await fn()
   } catch (error) {
     if (isConditionalCheckFailed(error)) {
       if (retriesRemaining === 0) {
-        throw new Error(`State lock ${lockId} could not be acquired!`)
+        throw new Error(`${description} failed after retry!`)
       } else {
-        await delay(100)
-        await acquireLock(lockId, retriesRemaining - 1)
+        await delay(50)
+        await withRetry(description, fn, retriesRemaining - 1)
       }
-    } else {
-      throw error
     }
   }
 }
 
+export const acquireLock = async (lockId: string): Promise<void> => {
+  await withRetry(`acquire lock ${lockId}`, async () => {
+    await client.put({
+      TableName: config.gameLockTable,
+      Item: { LockID: lockId },
+      ConditionExpression: 'attribute_not_exists(lockId)'
+    }).promise()
+  })
+}
+
 export const tryReleaseLock = async (lockId: string) => {
   try {
-    await client.delete({
-      TableName: config.stateLockTable,
-      Key: {
-        LockID: lockId
-      },
-      ConditionExpression: 'attribute_exists(LockID)'
-    }).promise()
+    await withRetry(`release lock ${lockId}`, async () => {
+      await client.delete({
+        TableName: config.gameLockTable,
+        Key: {
+          LockID: lockId
+        },
+        ConditionExpression: 'attribute_exists(lockId)'
+      }).promise()
+    })
   } catch (error) {
-    if (isConditionalCheckFailed(error)) {
-      console.error(`Warning: lock '${lockId}' could not be released!`)
-    } else {
-      throw error
-    }
+    console.error(error)
   }
 }

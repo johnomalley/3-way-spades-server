@@ -8,6 +8,16 @@ data "aws_iam_policy_document" "lambda" {
       "${aws_s3_bucket.game_state.arn}/*"
     ]
   }
+
+  statement {
+    actions = [
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
+    ]
+    resources = [
+      aws_dynamodb_table.state_lock.arn
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "assume_lambda" {

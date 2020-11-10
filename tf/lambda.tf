@@ -1,16 +1,16 @@
 data "archive_file" "lambda_source" {
-  type = "zip"
-  source_dir = "${path.module}/../dist"
+  type        = "zip"
+  source_dir  = "${path.module}/../dist"
   output_path = "${path.module}/out/lambda.zip"
 }
 
 resource "aws_lambda_function" "api" {
-  function_name = "${var.namespace}-3-way-spades-server"
-  handler = "index.handler"
-  filename = data.archive_file.lambda_source.output_path
+  function_name    = "${var.namespace}-3-way-spades-server"
+  handler          = "index.handler"
+  filename         = data.archive_file.lambda_source.output_path
   source_code_hash = data.archive_file.lambda_source.output_base64sha256
-  role = aws_iam_role.lambda.arn
-  runtime = "nodejs12.x"
+  role             = aws_iam_role.lambda.arn
+  runtime          = "nodejs12.x"
 }
 
 resource "aws_lambda_permission" "apigw" {

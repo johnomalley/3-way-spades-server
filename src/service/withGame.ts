@@ -1,12 +1,7 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { Game } from '../model/types'
-import { getGame } from './gameBucket'
 import { acquireLock, tryReleaseLock } from './stateLock'
-
-export interface GameRequest extends Request {
-  readonly game: Game
-  readonly playerId: string
-}
+import { getGame } from './gameBucket'
 
 const maybeAcquireLock = async ({ method, params }: Request): Promise<string | undefined> => {
   if (method === 'POST' || method === 'PUT' || method === 'DELETE') {
@@ -18,12 +13,12 @@ const maybeAcquireLock = async ({ method, params }: Request): Promise<string | u
   }
 }
 
-export default async (req: Request, res: Response, next: NextFunction) => {
-  let lockToRelease: string | undefined
+export default async (req: Request,
+  res: Response,
+  handler: (game: Game, playerId: string) => Promise<void>): Promise<void> => {
+  const lockId = await maybeAcquireLock(req)
   try {
-    const reqAny = req as any
     const { gameId, playerId } = req.params
-    lockToRelease = await maybeAcquireLock(req)
     const game = await getGame(gameId)
     if (!game) {
       res.status(404).json({
@@ -34,17 +29,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         message: `Player ${playerId} does not exist for game ${gameId}`
       })
     } else {
-      reqAny.game = game
-      reqAny.playerId = playerId
-      lockToRelease = undefined
-      next()
+      await handler(game, playerId)
     }
-  } catch (error) {
-    next(error)
   } finally {
-    if (lockToRelease) {
-      // noinspection ES6MissingAwait
-      await tryReleaseLock(lockToRelease)
+    if (lockId) {
+      await tryReleaseLock(lockId)
     }
   }
 }

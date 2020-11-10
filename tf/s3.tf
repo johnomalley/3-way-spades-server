@@ -14,21 +14,21 @@ resource "aws_s3_bucket" "game_state" {
 }
 
 resource "aws_s3_bucket_public_access_block" "common" {
-  count = length(local.buckets)
-  bucket = local.buckets[count.index]
-  block_public_acls = true
-  block_public_policy = true
-  ignore_public_acls = true
+  count                   = length(local.buckets)
+  bucket                  = local.buckets[count.index]
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
   restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket" "site" {
   bucket = "larry-john-michael-spades"
-  acl = "public-read"
+  acl    = "public-read"
 
   website {
     index_document = "index.html"
-    routing_rules = ""
+    routing_rules  = ""
   }
 }
 

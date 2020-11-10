@@ -3,7 +3,7 @@ import createGame from '../../src/model/createGame'
 import { Game, Hand, Player } from '../../src/model/types'
 import showHand from '../../src/model/showHand'
 
-describe('getPlayerView', () => {
+xdescribe('getPlayerView', () => {
   let game: Game
   let hand: Hand
   let player: Player
