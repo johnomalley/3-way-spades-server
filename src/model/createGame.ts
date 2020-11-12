@@ -6,6 +6,13 @@ import validationError from './validationError'
 import last = require('lodash/last')
 import moment = require('moment')
 
+export type GameOptions = Readonly<{
+  creator?: string
+  players?: ReadonlyArray<BasePlayer>
+  firstHand?: Hand
+  bids?: number[]
+}>
+
 export const defaultPlayers = [
   'Larry',
   'Michael',
@@ -27,13 +34,6 @@ const maybeAddBidding = (game: Game, options: GameOptions): Game => {
     return game
   }
 }
-
-export type GameOptions = Readonly<{
-  creator?: string
-  players?: ReadonlyArray<BasePlayer>
-  firstHand?: Hand
-  bids?: number[]
-}>
 
 export default (options: GameOptions = {}): Game => {
   const newPlayers = options.players || defaultPlayers

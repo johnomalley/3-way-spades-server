@@ -13,21 +13,3 @@ export const stringValue = (name: string, defaultValue?: string): string => {
     throw error(name, 'not defined')
   }
 }
-
-export type IntValueOptions = Readonly<{
-  defaultValue: number
-  min: number
-  max: number
-}>
-
-export const intValue = (name: string, {  defaultValue, min, max }: Partial<IntValueOptions> = {}): number => {
-  const asString = stringValue(name, defaultValue === undefined ? undefined : String(defaultValue))
-  const value = Number(asString)
-  if (!Number.isInteger(value)) {
-    throw error(name, `not an integer: ${asString}`)
-  } else if ((min !== undefined && value < min) || (max !== undefined && value > max)) {
-    throw error(name, `out of range: ${JSON.stringify({ min, max })}`)
-  } else {
-    return value
-  }
-}

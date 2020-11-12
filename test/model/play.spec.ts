@@ -1,10 +1,10 @@
-import isEqual = require('lodash/isEqual')
-import last = require('lodash/last')
 import createGame from '../../src/model/createGame'
 import createHand from '../../src/model/createHand'
 import play from '../../src/model/play'
 import { cardDisplayValue } from '../../src/model/display'
 import { Card, Game, HandPhase, PlayerHand, Suit } from '../../src/model/types'
+import isEqual = require('lodash/isEqual')
+import last = require('lodash/last')
 
 describe('play', () => {
   describe('first trick', () => {
@@ -54,7 +54,7 @@ describe('play', () => {
 
     it('updates winner and player when trick is complete', () => {
       const state = playFirstTrick()
-      const [ trick ] = state.hands[0].tricks
+      const [trick] = state.hands[0].tricks
       expect(trick.winner).toBeDefined()
 
       expect(state).toEqual({
@@ -90,7 +90,7 @@ describe('play', () => {
     }
 
     const findCard = (playerHand: PlayerHand, suit: Suit): Card => {
-      let card = playerHand.cardsInHand.find(_ => _.suit === suit)
+      const card = playerHand.cardsInHand.find(_ => _.suit === suit)
       return card || playerHand.cardsInHand[0]
     }
 
@@ -118,14 +118,14 @@ describe('play', () => {
     }
 
     it('completes hand after all tricks have been played', () => {
-      let result = playSubsequentTricks(playFirstTrick())
+      const result = playSubsequentTricks(playFirstTrick())
       expect(result.players.every(_ => _.points !== 0)).toBe(true)
       expect(result.hands.length).toBe(2)
       expect(last(result.hands)!.phase).toBe(HandPhase.Bidding)
     })
 
     it('ends game when winning score is reached', () => {
-      let result = playSubsequentTricks({ ...playFirstTrick(), winningScore: 10 })
+      const result = playSubsequentTricks({ ...playFirstTrick(), winningScore: 10 })
       if (result.players.some(_ => _.points >= 10)) {
         // random, but should happen pretty much
         expect(result.hands.length).toBe(1)

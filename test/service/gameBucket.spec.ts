@@ -1,4 +1,3 @@
-import omit = require('lodash/omit')
 import s3 from '../../src/service/s3'
 import createGame from '../../src/model/createGame'
 import {
@@ -11,6 +10,7 @@ import {
   timestampKey
 } from '../../src/service/gameBucket'
 import config from '../../src/config'
+import omit = require('lodash/omit')
 
 jest.mock('../../src/service/s3')
 

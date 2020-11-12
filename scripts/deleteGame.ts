@@ -9,7 +9,7 @@ const bucket = 'omalley-3-way-spades.ocelotconsulting.com'
 
 const activeGamesKey = 'active-games.json'
 
-const deleteGame = async (gameId = '2020110413_NT') => {
+const deleteGame = async (gameId = '2020111101_JA') => {
   const expectedKeys = [
     'state.json',
     'timestamp.txt'
@@ -30,10 +30,9 @@ const deleteGame = async (gameId = '2020110413_NT') => {
 
   await Promise.all(
     keys.map(_ => s3.deleteObject({
-        Bucket: bucket,
-        Key: _
-      }).promise()
-    )
+      Bucket: bucket,
+      Key: _
+    }).promise())
   )
 
   const { Body } = await s3.getObject({

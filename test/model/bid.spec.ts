@@ -1,8 +1,8 @@
 import createGame from '../../src/model/createGame'
 import { Game, Hand, HandPhase } from '../../src/model/types'
 import bid from '../../src/model/bid'
-import last = require('lodash/last')
 import showHand from '../../src/model/showHand'
+import last = require('lodash/last')
 
 describe('bid', () => {
   let game: Game
@@ -28,7 +28,7 @@ describe('bid', () => {
   }
 
   const apply = (value: number) => {
-    game = bid(value == -1 ? game : showPlayerHand(), playerId, value)
+    game = bid(value === -1 ? game : showPlayerHand(), playerId, value)
     updateHandAndPlayerId()
     return game
   }

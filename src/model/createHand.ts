@@ -2,6 +2,13 @@ import { Card, Hand, HandPhase, PlayerHand, Distributions, Suit } from './types'
 import createShuffledDeck from './createShuffledDeck'
 import cardSortComparator from './cardSortComparator'
 
+export type HandOptions = Readonly<{
+  playerCount: number
+  firstToBid: number
+  distributions?: Distributions
+  distributionsSorted: boolean
+}>
+
 const suitComparator = (a: Card, b: Card) => {
   if (a.suit === b.suit) {
     return 0
@@ -59,13 +66,6 @@ const deal = (deck: ReadonlyArray<Card>, options: HandOptions): ReadonlyArray<Pl
     }
   })
 }
-
-export type HandOptions = Readonly<{
-  playerCount: number
-  firstToBid: number
-  distributions?: Distributions
-  distributionsSorted: boolean
-}>
 
 const getOptions = (options: Partial<HandOptions>): HandOptions => {
   const { playerCount = 3, distributionsSorted = false } = options

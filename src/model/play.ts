@@ -100,17 +100,19 @@ const scoreHand = (game: Game, hand: Hand): Game => ({
 const isGameComplete = (game: Game) => game.players.some(_ => _.points >= game.winningScore)
 
 const addNewHandOrEndGame = (game: Game) =>
-  isGameComplete(game) ? {
-    ...game,
-    endTime: moment().toISOString()
-  } : {
-    ...game,
-    handCount: 1 + game.hands.length,
-    hands: [
-      ...game.hands,
-      createHand({ firstToBid: nextPlayerNumber(game, last(game.hands)!.firstToBid) })
-    ]
-  }
+  isGameComplete(game)
+    ? {
+        ...game,
+        endTime: moment().toISOString()
+      }
+    : {
+        ...game,
+        handCount: 1 + game.hands.length,
+        hands: [
+          ...game.hands,
+          createHand({ firstToBid: nextPlayerNumber(game, last(game.hands)!.firstToBid) })
+        ]
+      }
 
 // first play from first player
 export default (game: Game, playerId: string, card: Card): Game => {

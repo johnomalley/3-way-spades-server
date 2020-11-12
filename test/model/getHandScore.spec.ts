@@ -63,17 +63,17 @@ describe('getHandScore', () => {
   })
 
   it('applies penalty for bagging', () => {
-      playerHand = {
-        ...playerHand,
-        bid: 5,
-        trickCount: 8
-      }
-      player = {
-        ...player,
-        points: 7
-      }
+    playerHand = {
+      ...playerHand,
+      bid: 5,
+      trickCount: 8
+    }
+    player = {
+      ...player,
+      points: 7
+    }
 
-      expect(apply()).toBe(53 - 100)
+    expect(apply()).toBe(53 - 100)
   })
 
   it('is negative when going down', () => {

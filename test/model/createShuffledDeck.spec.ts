@@ -1,7 +1,7 @@
-import range = require('lodash/range')
 import createShuffledDeck from '../../src/model/createShuffledDeck'
 import cardSortComparator from '../../src/model/cardSortComparator'
 import { Card, Suit } from '../../src/model/types'
+import range = require('lodash/range')
 
 describe('createShuffledDeck', () => {
   const isOrdered = (deck: ReadonlyArray<Card>) => {

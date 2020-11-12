@@ -7,7 +7,7 @@ const lockTableName = 'omalley-game-lock'
 
 const test = async () => {
   const client = new AWS.DynamoDB.DocumentClient()
-  const gameId = "test"
+  const gameId = 'test'
 
   const tryLock = async () => {
     await client.put({
@@ -15,7 +15,7 @@ const test = async () => {
       Item: {
         GameID: gameId
       },
-      ConditionExpression: "attribute_not_exists(GameID)"
+      ConditionExpression: 'attribute_not_exists(GameID)'
     }).promise()
   }
 

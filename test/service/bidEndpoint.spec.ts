@@ -57,13 +57,13 @@ describe('bid', () => {
 
     expect(mocks.status).toHaveBeenCalledWith(400)
     expect(mocks.json).toHaveBeenCalledWith({
-      message: `Bid value is missing or invalid: undefined`
+      message: 'Bid value is missing or invalid: undefined'
     })
   })
 
   it('delegates to bid ', async () => {
     body.value = 42.42 // let the bid fn validate
-    let fakeGame: any = { type: 'fake' }
+    const fakeGame: any = { type: 'fake' }
     mocks.bid.mockReturnValue(fakeGame)
     await apply()
 
@@ -73,5 +73,4 @@ describe('bid', () => {
     expect(mocks.status).not.toHaveBeenCalled()
     expect(mocks.json).toHaveBeenCalledWith(fakeResponse)
   })
-
 })
